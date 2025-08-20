@@ -12,7 +12,7 @@ const { isStudent, isAdmin } = require("../middleware/roleProtection");
 
 const courseRouter = express.Router();
 // RECORDAR PONER LOS DOS GET SOLO PARA ESTUDIANTES
-courseRouter.route("/courses").get(protect, getAll);
+courseRouter.route("/courses").get(getAll);
 courseRouter.route("/courses/create").post(protect, isAdmin, create);
 
 courseRouter.route("/courses/:slug").get(protect, getOne)

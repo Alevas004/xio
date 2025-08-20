@@ -2,34 +2,35 @@ const slugify = require("slugify");
 const Product = require("../models/Product");
 const sequelize = require("./connection");
 const Course = require("../models/Course");
+const Academy = require("../models/Academy");
 
 async function updateSlugs() {
   try {
     await sequelize.authenticate();
     console.log("✅ Conectado a la BD");
 
-    const courses = await Course.findAll();
-    console.log(`📊 Encontrados ${courses.length} cursos`);
+    const events = await Academy.findAll();
+    console.log(`📊 Encontrados ${events.length} eventos`);
 
     let updated = 0;
 
-    for (const course of courses) {
+    for (const event of events) {
       console.log(
-        `🔍 Procesando: ${course.title}, slug actual: "${course.slug}"`
+        `🔍 Procesando: ${event.title}, slug actual: "${event.slug}"`
       );
 
-      if (!course.slug || course.slug.trim() === "") {
-        const newSlug = slugify(course.title, { lower: true, strict: true });
-        course.slug = newSlug;
-        await course.save();
+      if (!event.slug || event.slug.trim() === "") {
+        const newSlug = slugify(event.title, { lower: true, strict: true });
+        event.slug = newSlug;
+        await event.save();
         updated++;
-        console.log(`✅ Actualizado: ${course.title} -> ${newSlug}`);
+        console.log(`✅ Actualizado: ${event.title} -> ${newSlug}`);
       } else {
-        console.log(`⏭️ Ya tiene slug: ${course.slug}`);
+        console.log(`⏭️ Ya tiene slug: ${event.slug}`);
       }
     }
 
-    console.log(`🎯 Actualizados ${updated} de ${courses.length} cursos`);
+    console.log(`🎯 Actualizados ${updated} de ${events.length} eventos`);
     await sequelize.close();
   } catch (error) {
     console.error("❌ Error detallado:", error);

@@ -6,14 +6,24 @@ const getAll = catchError(async (req, res) => {
   return res.json(results);
 });
 
+const getEvents = catchError(async (req, res) => {
+  const { type } = req.query;
+  const where = {};
+  if (type) where.type = type;
+
+  const events = await Academy.findAll({ where });
+
+  return res.json(events);
+});
+
 const create = catchError(async (req, res) => {
   const result = await Academy.create(req.body);
   return res.status(201).json(result);
 });
 
 const getOne = catchError(async (req, res) => {
-  const { id } = req.params;
-  const result = await Academy.findByPk(id);
+  const { slug } = req.params;
+  const result = await Academy.findOne({ where: { slug } });
   if (!result) return res.sendStatus(404);
   return res.json(result);
 });
@@ -40,4 +50,5 @@ module.exports = {
   getOne,
   remove,
   update,
+  getEvents
 };

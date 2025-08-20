@@ -136,7 +136,9 @@ const update = catchError(async (req, res) => {
   } = req.body;
 
   if (userId !== id) {
-    return res.status(403).json({ message: "You can only update your own profile" });
+    return res
+      .status(403)
+      .json({ message: "You can only update your own profile" });
   }
 
   const result = await User.update(

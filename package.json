@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/server",
-    "dev": "nodemon src/server"
+    "dev": "nodemon src/server",
+    "update-slugs": "node src/utils/updateSlugs.js",
+    "reset-academy": "node src/utils/resetAcademyTable.js"
   },
   "keywords": [],
   "author": "",
