@@ -7,6 +7,7 @@ const orderbxRouter = require("./orderbx.router");
 const academyRouter = require("./academy.router");
 const courseRouter = require("./course.router");
 const serviceSpaRouter = require("./servicespa.router");
+const orderAcademyRouter = require("./orderacademy.router");
 const router = express.Router();
 
 // colocar las rutas aquí
@@ -16,8 +17,8 @@ router.use("/xiomarasanchezterapeuta", orderxsRouter);
 router.use("/byxio", productRouter);
 router.use("/byxio", orderbxRouter);
 router.use("/xios-academy", academyRouter);
-router.use("/xios-academy", courseRouter);
+router.use("/xios-courses", courseRouter);
+router.use("/xios-academy", orderAcademyRouter);
 router.use("/xiomarasanchez-spa", serviceSpaRouter);
-
 
 module.exports = router;

@@ -1,6 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../utils/connection");
 const slugify = require("slugify");
+
 const Course = sequelize.define("course", {
   id: {
     type: DataTypes.UUID,

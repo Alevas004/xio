@@ -1,9 +1,43 @@
 const catchError = require("../utils/catchError");
 const Product = require("../models/Product");
+const { Op } = require("sequelize");
+const { parse } = require("dotenv");
 
 const getAll = catchError(async (req, res) => {
-  const results = await Product.findAll();
-  return res.json(results);
+  const { category, search, page = 1, limit = 9 } = req.query;
+
+  const where = {};
+
+  if (category) {
+    where.category = category;
+  }
+
+  if (search) {
+    where.name = {
+      [Op.iLike]: `%${search}%`,
+    };
+  }
+
+  const offset = (page - 1) * limit;
+
+  const { rows: products, count: totalItems } = await Product.findAndCountAll({
+    where: where,
+    offset: parseInt(offset),
+    limit: parseInt(limit),
+  });
+
+  const totalPages = Math.ceil(totalItems / limit);
+
+
+
+  return res.json({
+    products,
+    pagination: {
+      totalItems,
+      totalPages,
+      currentPage: parseInt(page)
+    },
+  });
 });
 
 const create = catchError(async (req, res) => {
