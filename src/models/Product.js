@@ -62,6 +62,21 @@ const Product = sequelize.define("product", {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
+  hasDiscount: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+    allowNull: true,
+  },
+  isNew: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
+    allowNull: true,
+  },
+  discountValue: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+    allowNull: true,
+  },
   isSold: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
