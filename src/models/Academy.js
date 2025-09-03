@@ -24,7 +24,6 @@ const Academy = sequelize.define("academy", {
   // Medios
   image: { type: DataTypes.STRING, allowNull: true },
   images: { type: DataTypes.ARRAY(DataTypes.STRING), allowNull: true },
-
   // Ubicación y tiempo
   location: { type: DataTypes.STRING, allowNull: false },
   start_date: { type: DataTypes.DATEONLY, allowNull: false },
@@ -55,6 +54,9 @@ const Academy = sequelize.define("academy", {
 
   // Estado
   is_active: { type: DataTypes.BOOLEAN, defaultValue: true },
+
+  
+  //academyId
 });
 
 Academy.beforeCreate((academy) => {

@@ -18,6 +18,6 @@ courseRouter.route("/courses/create").post(protect, isAdmin, create);
 courseRouter
   .route("/courses/:id")
   .delete(protect, isAdmin, remove)
-  .put(protect, isAdmin, update);
+  .put(protect, update);
 
 module.exports = courseRouter;

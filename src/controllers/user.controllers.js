@@ -3,6 +3,9 @@ const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../utils/sendEmail");
+const Course = require("../models/Course");
+const Academy = require("../models/Academy");
+const OrderAcademy = require("../models/OrderAcademy");
 
 const BASE_URL = "http://localhost:8080";
 
@@ -107,7 +110,34 @@ const login = catchError(async (req, res) => {
 
 const getOne = catchError(async (req, res) => {
   const { id } = req.params;
-  const result = await User.findByPk(id);
+  const result = await User.findByPk(id, {
+    include: [
+      {
+        model: OrderAcademy,
+        include: [
+          { model: Course }, // si compró un curso
+          { model: Academy }, // si compró un academy
+        ],
+      },
+    ],
+  });
+  if (!result) return res.sendStatus(404);
+  return res.json(result);
+});
+
+const getMyProfile = catchError(async (req, res) => {
+  const userId = req.user.id;
+  const result = await User.findByPk(userId, {
+    include: [
+      {
+        model: OrderAcademy,
+        include: [
+          { model: Course }, // si compró un curso
+          { model: Academy, include: [Course] }, // si compró un academy
+        ],
+      },
+    ],
+  });
   if (!result) return res.sendStatus(404);
   return res.json(result);
 });
@@ -170,4 +200,5 @@ module.exports = {
   update,
   login,
   emailConfirmed,
+  getMyProfile,
 };
