@@ -13,10 +13,10 @@ const servicexsRouter = express.Router();
 
 servicexsRouter.route("/servicesxs").get(getAll);
 servicexsRouter.route("/servicesxs/create").post(protect, isAdmin, create);
+servicexsRouter.route("/servicesxs/:slug").get(getOne); 
 
 servicexsRouter
   .route("/servicesxs/:id")
-  .get(getOne)
   .delete(protect, isAdmin, remove)
   .put(protect, isAdmin, update);
 

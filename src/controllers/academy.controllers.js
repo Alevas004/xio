@@ -1,6 +1,7 @@
 const catchError = require("../utils/catchError");
 const Academy = require("../models/Academy");
 const Course = require("../models/Course");
+const { Op } = require("sequelize");
 
 const getAll = catchError(async (req, res) => {
   const results = await Academy.findAll({include: [Course]});
@@ -8,11 +9,12 @@ const getAll = catchError(async (req, res) => {
 });
 
 const getEvents = catchError(async (req, res) => {
-  const { type } = req.query;
+  const { type, search } = req.query;
   const where = {};
   if (type) where.type = type;
+  if (search) where.title = { [Op.iLike]: `%${search}%` };
 
-  const events = await Academy.findAll({ where });
+  const events = await Academy.findAll({ where, include: [Course] });
 
   return res.json(events);
 });

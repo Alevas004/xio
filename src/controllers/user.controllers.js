@@ -163,6 +163,12 @@ const update = catchError(async (req, res) => {
     city,
     address,
     date_of_birth,
+    isProfessional,
+    years_experience,
+    bio,
+    certifications,
+    specialties,
+    clients_count,
   } = req.body;
 
   if (userId !== id) {
@@ -182,6 +188,12 @@ const update = catchError(async (req, res) => {
       city,
       address,
       date_of_birth,
+      isProfessional,
+      years_experience,
+      bio,
+      certifications,
+      specialties,
+      clients_count,
     },
     {
       where: { id: userId },

@@ -3,13 +3,14 @@ const Product = require("../models/Product");
 const sequelize = require("./connection");
 const Course = require("../models/Course");
 const Academy = require("../models/Academy");
+const ServiceXS = require("../models/ServiceXS");
 
 async function updateSlugs() {
   try {
     await sequelize.authenticate();
     console.log("✅ Conectado a la BD");
 
-    const events = await Academy.findAll();
+    const events = await ServiceXS.findAll();
     console.log(`📊 Encontrados ${events.length} eventos`);
 
     let updated = 0;

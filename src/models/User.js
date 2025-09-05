@@ -72,6 +72,32 @@ const User = sequelize.define("user", {
     allowNull: true,
     defaultValue: true,
   },
+  //* INFO EXTRA PARA ADMIN QUE CREA SERVICIOS
+  isProfessional: {
+    type: DataTypes.BOOLEAN,
+    allowNull: true,
+    defaultValue: false,
+  },
+  years_experience: {
+    type: DataTypes.DATEONLY,
+    allowNull: true,
+  },
+  bio: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  certifications: {
+    type: DataTypes.ARRAY(DataTypes.STRING),
+    allowNull: true,
+  },
+  specialties: {
+    type: DataTypes.ARRAY(DataTypes.STRING),
+    allowNull: true,
+  },
+  clients_count: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
 });
 User.prototype.toJSON = function () {
   const values = Object.assign({}, this.get());
