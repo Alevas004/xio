@@ -1,17 +1,17 @@
 const sequelize = require("./connection");
-const OrderAcademy = require("../models/OrderAcademy");
+const Lesson = require("../models/Lesson");
 
-async function recreateOrderAcademyTable() {
+async function recreateLessonTable() {
   try {
-    console.log("🔧 Recreating OrderAcademy table...");
+    console.log("🔧 Recreating Lesson table...");
 
     // 1. Eliminar la tabla
     await sequelize.query('DROP TABLE IF EXISTS "orderacademies" CASCADE;');
     console.log("✅ Old table dropped");
 
     // 2. Recrear usando sync
-    await OrderAcademy.sync();
-    console.log("✅ OrderAcademy table recreated");
+    await Lesson.sync();
+    console.log("✅ Lesson table recreated");
   } catch (error) {
     console.error("❌ Error:", error);
   } finally {
@@ -19,7 +19,7 @@ async function recreateOrderAcademyTable() {
   }
 }
 
-recreateOrderAcademyTable()
+recreateLessonTable()
   .then(() => {
     console.log("✅ Proceso completado exitosamente");
     process.exit(0);

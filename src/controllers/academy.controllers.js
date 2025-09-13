@@ -2,9 +2,13 @@ const catchError = require("../utils/catchError");
 const Academy = require("../models/Academy");
 const Course = require("../models/Course");
 const { Op } = require("sequelize");
+const Lesson = require("../models/Lesson");
 
 const getAll = catchError(async (req, res) => {
-  const results = await Academy.findAll({include: [Course]});
+  const results = await Academy.findAll({ include: {
+    model: Course,
+    include: [Lesson],
+  }});
   return res.json(results);
 });
 
@@ -14,7 +18,10 @@ const getEvents = catchError(async (req, res) => {
   if (type) where.type = type;
   if (search) where.title = { [Op.iLike]: `%${search}%` };
 
-  const events = await Academy.findAll({ where, include: [Course] });
+  const events = await Academy.findAll({ where, include: {
+    model: Course,
+    include: [Lesson],
+  }});
 
   return res.json(events);
 });
@@ -26,7 +33,7 @@ const create = catchError(async (req, res) => {
 
 const getOne = catchError(async (req, res) => {
   const { slug } = req.params;
-  const result = await Academy.findOne({ where: { slug } });
+  const result = await Academy.findOne({ where: { slug }, include: [Course] });
   if (!result) return res.sendStatus(404);
   return res.json(result);
 });
@@ -53,5 +60,5 @@ module.exports = {
   getOne,
   remove,
   update,
-  getEvents
+  getEvents,
 };

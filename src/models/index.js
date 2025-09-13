@@ -6,6 +6,7 @@ const Product = require("./Product");
 const Academy = require("./Academy");
 const Course = require("./Course");
 const OrderAcademy = require("./OrderAcademy");
+const Lesson = require("./Lesson");
 
 //* xiomarasanchezterapeuta
 // Un usuario puede tener muchos servicios
@@ -45,3 +46,13 @@ Course.belongsTo(Academy, { foreignKey: "academyId" });
 //* User ↔ Course (acceso directo a cursos, ya sea por compra individual o porque venían dentro de un Academy)
 User.belongsToMany(Course, { through: "UserCourse", foreignKey: "userId" });
 Course.belongsToMany(User, { through: "UserCourse", foreignKey: "courseId" });
+
+//* COURSE - LESSON
+
+Course.hasMany(Lesson, { foreignKey: "courseId" });
+Lesson.belongsTo(Course, { foreignKey: "courseId" });
+
+//* COURSE - INSTRUCTOR (User)
+
+User.hasMany(Course, { foreignKey: "instructorId", as: "instructedCourses" });
+Course.belongsTo(User, { foreignKey: "instructorId", as: "instructorUser" });

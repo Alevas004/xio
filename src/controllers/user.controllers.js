@@ -6,11 +6,31 @@ const sendEmail = require("../utils/sendEmail");
 const Course = require("../models/Course");
 const Academy = require("../models/Academy");
 const OrderAcademy = require("../models/OrderAcademy");
+const Lesson = require("../models/Lesson");
 
 const BASE_URL = "http://localhost:8080";
 
 const getAll = catchError(async (req, res) => {
-  const results = await User.findAll();
+  const results = await User.findAll({
+    include: [
+      {
+        model: OrderAcademy,
+        include: [
+          {
+            model: Course,
+            include: [Lesson],
+          },
+          {
+            model: Academy,
+            include: {
+              model: Course,
+              include: [Lesson],
+            },
+          },
+        ],
+      },
+    ],
+  });
   return res.json(results);
 });
 
@@ -115,8 +135,17 @@ const getOne = catchError(async (req, res) => {
       {
         model: OrderAcademy,
         include: [
-          { model: Course }, // si compró un curso
-          { model: Academy }, // si compró un academy
+          {
+            model: Course,
+            include: [Lesson],
+          },
+          {
+            model: Academy,
+            include: {
+              model: Course,
+              include: [Lesson],
+            },
+          },
         ],
       },
     ],
@@ -132,8 +161,17 @@ const getMyProfile = catchError(async (req, res) => {
       {
         model: OrderAcademy,
         include: [
-          { model: Course }, // si compró un curso
-          { model: Academy, include: [Course] }, // si compró un academy
+          {
+            model: Course,
+            include: [Lesson],
+          },
+          {
+            model: Academy,
+            include: {
+              model: Course,
+              include: [Lesson],
+            },
+          },
         ],
       },
     ],
@@ -141,6 +179,44 @@ const getMyProfile = catchError(async (req, res) => {
   if (!result) return res.sendStatus(404);
   return res.json(result);
 });
+
+const getMyCourses = catchError(async (req, res) => {
+  const userId = req.user.id;
+
+  const result = await User.findByPk(userId, {
+    attributes: ["id", "first_name", "last_name", "email"], 
+    include: [
+      {
+        model: OrderAcademy,
+        where: { paymentStatus: "paid" }, // 👈 solo cursos pagados
+        attributes: ["id", "createdAt"],
+        include: [
+          {
+            model: Course,
+            include: [
+              {
+                model: Lesson,
+              },
+            ],
+          },
+          {
+            model: Academy,
+            include: [
+              {
+                model: Course,
+                include: [Lesson],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  });
+
+  if (!result) return res.sendStatus(404);
+  return res.json(result);
+});
+
 
 const remove = catchError(async (req, res) => {
   const { id } = req.params;
@@ -213,4 +289,5 @@ module.exports = {
   login,
   emailConfirmed,
   getMyProfile,
+  getMyCourses
 };

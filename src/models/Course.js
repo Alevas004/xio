@@ -17,7 +17,7 @@ const Course = sequelize.define("course", {
   url: { type: DataTypes.STRING, allowNull: true },
   images: { type: DataTypes.ARRAY(DataTypes.STRING), allowNull: true },
 
-  category: { type: DataTypes.ARRAY(DataTypes.STRING), allowNull: true }, // Ej: 'masaje', 'espiritualidad', etc.
+  category: { type: DataTypes.STRING, allowNull: true }, // Ej: 'masaje', 'espiritualidad', etc.
   tags: { type: DataTypes.ARRAY(DataTypes.STRING), allowNull: true },
 
   price: { type: DataTypes.INTEGER, allowNull: false },
@@ -34,7 +34,20 @@ const Course = sequelize.define("course", {
   includes: { type: DataTypes.ARRAY(DataTypes.STRING), allowNull: true },
 
   is_active: { type: DataTypes.BOOLEAN, defaultValue: true },
+  belongsToAWorkshop: {
+    type: DataTypes.BOOLEAN,
+    allowNull: true,
+    defaultValue: false,
+  },
   slug: { type: DataTypes.STRING, unique: true },
+  instructorId: {
+    type: DataTypes.UUID,
+    allowNull: true, // Permitir null para cursos existentes
+    references: {
+      model: "users",
+      key: "id",
+    },
+  },
 });
 
 Course.beforeCreate((course) => {

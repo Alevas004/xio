@@ -2,9 +2,24 @@ const catchError = require("../utils/catchError");
 const OrderAcademy = require("../models/OrderAcademy");
 const Course = require("../models/Course");
 const Academy = require("../models/Academy");
+const Lesson = require("../models/Lesson");
 
 const getAll = catchError(async (req, res) => {
-  const results = await OrderAcademy.findAll({include: [Course, Academy]});
+  const results = await OrderAcademy.findAll({
+    include: [
+      {
+        model: Course,
+        include: [Lesson],
+      },
+      {
+        model: Academy,
+        include: {
+          model: Course,
+          include: [Lesson],
+        },
+      },
+    ],
+  });
   return res.json(results);
 });
 
@@ -15,7 +30,9 @@ const create = catchError(async (req, res) => {
 
 const getOne = catchError(async (req, res) => {
   const { id } = req.params;
-  const result = await OrderAcademy.findByPk(id, {include: [Course, Academy]});
+  const result = await OrderAcademy.findByPk(id, {
+    include: [Course, Academy],
+  });
   if (!result) return res.sendStatus(404);
   return res.json(result);
 });
